@@ -1,0 +1,15 @@
+[package]
+name = "flowy"
+version = "0.1.0"
+edition = "2021"
+description = "A library for flow fields, primarily for art purposes"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/SethRAH/flowy"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[dev-dependencies]
+mockall = "0.11.0"
