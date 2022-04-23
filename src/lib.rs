@@ -11,6 +11,38 @@ mod tests {
     }
 
     #[test]
+    fn normalize_returns_0_0_if_no_length(){
+        let start = [0.,0.];
+        let result = normalize(start);
+        assert_eq!(result[0], 0.);
+        assert_eq!(result[1], 0.);
+    }
+
+    #[test]
+    fn normalize_returns_correctly_for_horizontal_vector(){
+        let start = [15.,0.];
+        let result = normalize(start);
+        assert_eq!(result[0], 1.);
+        assert_eq!(result[1], 0.);
+    }
+    
+    #[test]
+    fn normalize_returns_correctly_for_vertical_vector(){
+        let start = [0.,42.];
+        let result = normalize(start);
+        assert_eq!(result[0], 0.);
+        assert_eq!(result[1], 1.);
+    }    
+    
+    #[test]
+    fn normalize_returns_correctly_for_angled_vector(){
+        let start = [3.,4.];
+        let result = normalize(start);
+        assert_eq!(result[0], 3./5.);
+        assert_eq!(result[1], 4./5.);
+    }
+
+    #[test]
     fn get_force_vector_returns_high_val_nbr_if_at_center(){
         let x = 542.;
         let y = -123.;
@@ -121,12 +153,7 @@ impl Flowfield2D for BoundedFlowfield2D {
 
     fn get_normalized_vec(&mut self, x: f32, y: f32) -> [f32; 2] { 
         let vec = self.get_vec(x,y);
-        let length = (vec[0] * vec[0] * vec[1] * vec[1]).sqrt();
-        if length == 0.0 {
-            return [0.,0.];
-        }
-        
-        [vec[0]/length, vec[1]/length]
+        normalize(vec)
      }
     fn get_perp_vec(&mut self, x: f32, y: f32) -> [f32; 2] {
         let vec = self.get_vec(x,y);
@@ -134,15 +161,24 @@ impl Flowfield2D for BoundedFlowfield2D {
         [vec[1], -vec[0]]
     }
     fn get_perp_normalized_vec(&mut self, x: f32, y: f32) -> [f32; 2] { 
-        let vec = self.get_normalized_vec(x,y);
-        
-        [vec[1], -vec[0]]
+        let vec = self.get_perp_vec(x,y);        
+        normalize(vec)
      }
         
     fn add_pole(&mut self, pole: Pole2D){
         self.poles.push(pole);
     }
     
+}
+
+
+fn normalize(vec: [f32; 2]) -> [f32;2] {
+    let length = ((vec[0] * vec[0]) + (vec[1] * vec[1])).sqrt();
+    if length == 0.0 {
+        return [0.,0.];
+    }
+    
+    [vec[0]/length, vec[1]/length]
 }
 
 
