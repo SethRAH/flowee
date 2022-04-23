@@ -55,7 +55,7 @@ mod tests {
 
     #[test]
     fn get_vec_returns_0_0_for_default_bounded_flow_field_2d(){
-        let mut bounded = BoundedFlowfield2D::default();
+        let bounded = BoundedFlowfield2D::default();
 
         let zero = bounded.get_vec(0.0, 0.0);
         let first = bounded.get_vec(1.0, 3.2);
@@ -118,10 +118,10 @@ impl Pole2D{
 }
 
 pub trait Flowfield2D {
-    fn get_vec (&mut self, x: f32, y: f32) -> Vector2<f32>;
-    fn get_normalized_vec (&mut self, x: f32, y: f32) -> Vector2<f32>;
-    fn get_perp_vec (&mut self, x: f32, y: f32) -> Vector2<f32>;
-    fn get_perp_normalized_vec (&mut self, x: f32, y: f32) -> Vector2<f32>;
+    fn get_vec (&self, x: f32, y: f32) -> Vector2<f32>;
+    fn get_normalized_vec (&self, x: f32, y: f32) -> Vector2<f32>;
+    fn get_perp_vec (&self, x: f32, y: f32) -> Vector2<f32>;
+    fn get_perp_normalized_vec (&self, x: f32, y: f32) -> Vector2<f32>;
 
     fn add_pole(&mut self, pole: Pole2D);
 }
@@ -138,7 +138,7 @@ impl BoundedFlowfield2D {
 }
 
 impl Flowfield2D for BoundedFlowfield2D {    
-    fn get_vec(&mut self, x: f32, y: f32) -> [f32; 2] { 
+    fn get_vec(&self, x: f32, y: f32) -> [f32; 2] { 
         let mut cur_x = 0.0;
         let mut cur_y = 0.0;
 
@@ -151,16 +151,16 @@ impl Flowfield2D for BoundedFlowfield2D {
         [cur_x,cur_y]
     }
 
-    fn get_normalized_vec(&mut self, x: f32, y: f32) -> [f32; 2] { 
+    fn get_normalized_vec(&self, x: f32, y: f32) -> [f32; 2] { 
         let vec = self.get_vec(x,y);
         normalize(vec)
      }
-    fn get_perp_vec(&mut self, x: f32, y: f32) -> [f32; 2] {
+    fn get_perp_vec(&self, x: f32, y: f32) -> [f32; 2] {
         let vec = self.get_vec(x,y);
 
         [vec[1], -vec[0]]
     }
-    fn get_perp_normalized_vec(&mut self, x: f32, y: f32) -> [f32; 2] { 
+    fn get_perp_normalized_vec(&self, x: f32, y: f32) -> [f32; 2] { 
         let vec = self.get_perp_vec(x,y);        
         normalize(vec)
      }
